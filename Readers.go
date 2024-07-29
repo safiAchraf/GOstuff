@@ -6,9 +6,16 @@ import (
 	"strings"
 )
 
-func main() {
-	r := strings.NewReader("Hello, Reader!")
+func concater() func(string) string {
+	doc := ""
+	return func(s string) string {
+		doc +=  s + " "
+		return doc
+	}
+}
 
+func main() {
+	r := strings.NewReader("l")
 	b := make([]byte, 8)
 	for {
 		n, err := r.Read(b)
