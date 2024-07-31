@@ -114,7 +114,7 @@ func sendFile(conn net.Conn, filePath string) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		fmt.Println("Error opening file:", err.Error())
-		conn.Write([]byte("HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n"))
+		sendResponce(conn, "Not Found", 404)
 		return
 	}
 	defer file.Close()
@@ -122,7 +122,7 @@ func sendFile(conn net.Conn, filePath string) {
 	fileInfo, err := file.Stat()
 	if err != nil {
 		fmt.Println("Error getting file info:", err.Error())
-		send500(conn)
+		sendResponce(conn, "Internal Server Error", 500)
 		return
 	}
 	fileSize := fileInfo.Size()
@@ -137,9 +137,6 @@ func sendFile(conn net.Conn, filePath string) {
 	}
 }
 
-func send404(conn net.Conn) {
-	conn.Write([]byte("HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n"))
-}
-func send500(conn net.Conn) {
-	conn.Write([]byte("HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n"))
+func sendResponce (conn net.Conn, responce string , statusCode int) {
+	conn.Write([]byte("HTTP/1.1 " + strconv.Itoa(statusCode) + " " + responce + "\r\nContent-Length: 0\r\n\r\n"))
 }
