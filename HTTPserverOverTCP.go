@@ -110,8 +110,8 @@ func readBody(reader *bufio.Reader, contentLength int) ([]byte, error) {
 
 
 func sendFile(conn net.Conn, filePath string) {
-	file, err := os.Open(filePath)
 
+	file, err := os.Open(filePath)
 	if err != nil {
 		fmt.Println("Error opening file:", err.Error())
 		conn.Write([]byte("HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n"))
@@ -122,7 +122,7 @@ func sendFile(conn net.Conn, filePath string) {
 	fileInfo, err := file.Stat()
 	if err != nil {
 		fmt.Println("Error getting file info:", err.Error())
-		conn.Write([]byte("HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n"))
+		send500(conn)
 		return
 	}
 	fileSize := fileInfo.Size()
@@ -135,4 +135,11 @@ func sendFile(conn net.Conn, filePath string) {
 		fmt.Println("Error sending file:", err.Error())
 		return
 	}
+}
+
+func send404(conn net.Conn) {
+	conn.Write([]byte("HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n"))
+}
+func send500(conn net.Conn) {
+	conn.Write([]byte("HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n"))
 }
