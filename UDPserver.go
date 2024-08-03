@@ -40,6 +40,9 @@ func main() {
 		if err != nil {
 			fmt.Println("Error sending data:", err)
 		}
+
+		fmt.Println("Data sent to client")
+		_, err = conn.WriteToUDP([]byte("Hello client , this is the UDP server"), addr)
 	
 	}
 }
