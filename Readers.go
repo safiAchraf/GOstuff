@@ -6,12 +6,12 @@ import (
 	"strings"
 )
 
-func concater() func(string) string {
-	doc := ""
-	return func(s string) string {
-		doc +=  s + " "
-		return doc
-	}
+
+type MyReader struct{}
+
+func (r MyReader) Read(b []byte) (int, error) {
+	b[0] = 'A'
+	return 1, nil
 }
 
 func main() {
